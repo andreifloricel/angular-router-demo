@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
  * TODO: better modal implementation that doesn't use window.confirm
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DialogService {
   /**
@@ -18,5 +18,5 @@ export class DialogService {
     const confirmation = window.confirm(message || 'Is it OK?');
 
     return of(confirmation);
-  };
+  }
 }

@@ -1,16 +1,18 @@
-import { Injectable }       from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  CanActivate, Router,
+  CanActivate,
+  Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   CanActivateChild,
   NavigationExtras,
-  CanLoad, Route
-}                           from '@angular/router';
-import { AuthService }      from './auth.service';
+  CanLoad,
+  Route
+} from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private authService: AuthService, private router: Router) {}
@@ -32,7 +34,9 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   checkLogin(url: string): boolean {
-    if (this.authService.isLoggedIn) { return true; }
+    if (this.authService.isLoggedIn) {
+      return true;
+    }
 
     // Store the attempted URL for redirecting
     this.authService.redirectUrl = url;
@@ -43,7 +47,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     // Set our navigation extras object
     // that contains our global query params and fragment
     let navigationExtras: NavigationExtras = {
-      queryParams: { 'session_id': sessionId },
+      queryParams: { session_id: sessionId },
       fragment: 'anchor'
     };
 

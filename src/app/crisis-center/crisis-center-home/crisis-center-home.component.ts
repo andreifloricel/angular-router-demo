@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './crisis-center-home.component.html',
   styleUrls: ['./crisis-center-home.component.css']
 })
-export class CrisisCenterHomeComponent { }
+export class CrisisCenterHomeComponent {}

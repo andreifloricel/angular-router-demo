@@ -1,5 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
-import { Router }                 from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-compose-message',
@@ -30,6 +30,6 @@ export class ComposeMessageComponent {
   closePopup() {
     // Providing a `null` value to the named outlet
     // clears the contents of the named outlet
-    this.router.navigate([{ outlets: { popup: null }}]);
+    this.router.navigate([{ outlets: { popup: null } }]);
   }
 }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { HeroService }  from '../hero.service';
+import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
 
 @Component({
@@ -22,8 +22,7 @@ export class HeroDetailComponent implements OnInit {
 
   ngOnInit() {
     this.hero$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getHero(params.get('id')))
+      switchMap((params: ParamMap) => this.service.getHero(params.get('id')))
     );
   }
 

@@ -6,7 +6,7 @@ import { slideInAnimation } from './animations';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
-  animations: [ slideInAnimation ]
+  animations: [slideInAnimation]
 })
 export class AppComponent {
   getAnimationData(outlet: RouterOutlet) {
