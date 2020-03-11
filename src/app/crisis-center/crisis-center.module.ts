@@ -8,9 +8,10 @@ import { CrisisCenterComponent } from './crisis-center/crisis-center.component';
 import { CrisisDetailComponent } from './crisis-detail/crisis-detail.component';
 
 import { CrisisCenterRoutingModule } from './crisis-center-routing.module';
+import {MatTabsModule} from '@angular/material';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, CrisisCenterRoutingModule],
+  imports: [CommonModule, FormsModule, CrisisCenterRoutingModule, MatTabsModule],
   declarations: [
     CrisisCenterComponent,
     CrisisListComponent,

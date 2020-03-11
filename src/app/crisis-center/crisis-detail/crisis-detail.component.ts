@@ -1,23 +1,34 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Crisis } from '../crisis';
 import { DialogService } from '../../dialog.service';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
+import {
+  EditableComponent,
+  UnsavedChangesService
+} from '../../unsaved-changes/unsaved-changes.service';
 
 @Component({
   selector: 'app-crisis-detail',
   templateUrl: './crisis-detail.component.html',
   styleUrls: ['./crisis-detail.component.css']
 })
-export class CrisisDetailComponent implements OnInit {
+export class CrisisDetailComponent implements OnInit, EditableComponent {
   crisis: Crisis;
   editName: string;
+
+  // default: first tab
+  previouslySelectedTabIndex = 0;
+  revertInProgress = false;
+
+  @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public dialogService: DialogService
+    private unsavedChangesService: UnsavedChangesService
   ) {}
 
   ngOnInit() {
@@ -36,14 +47,8 @@ export class CrisisDetailComponent implements OnInit {
     this.gotoCrises();
   }
 
-  canDeactivate(): Observable<boolean> | boolean {
-    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
-    if (!this.crisis || this.crisis.name === this.editName) {
-      return true;
-    }
-    // Otherwise ask the user with the dialog service and return its
-    // observable which resolves to true or false when the user decides
-    return this.dialogService.confirm('Discard changes?');
+  hasUnsavedChanges(): boolean {
+    return this.crisis && this.crisis.name !== this.editName;
   }
 
   gotoCrises() {
@@ -53,5 +58,25 @@ export class CrisisDetailComponent implements OnInit {
     // Add a totally useless `foo` parameter for kicks.
     // Relative navigation back to the crises
     this.router.navigate(['../', { id: crisisId, foo: 'foo' }], { relativeTo: this.route });
+  }
+
+  onSelectedTabChange(tabChangeEvent: MatTabChangeEvent) {
+    /*if (this.revertInProgress) {
+      this.revertInProgress = false;
+    } else {
+      // check for unsaved changes
+      this.unsavedChangesService
+        .discardUnsavedChanges(this.hasUnsavedChanges())
+        .subscribe(discardChanges => {
+          // prevent or allow tab change
+          if (discardChanges) {
+            // update the selected tab index
+            this.previouslySelectedTabIndex = tabChangeEvent.index;
+          } else {
+            this.revertInProgress = true;
+            this.tabGroup.selectedIndex = this.previouslySelectedTabIndex;
+          }
+        });
+    }*/
   }
 }
