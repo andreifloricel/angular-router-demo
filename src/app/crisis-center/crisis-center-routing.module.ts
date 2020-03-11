@@ -22,10 +22,7 @@ const crisisCenterRoutes: Routes = [
           {
             path: ':id',
             component: CrisisDetailComponent,
-            canDeactivate: [UnsavedChangesGuard],
-            resolve: {
-              crisis: CrisisDetailResolverService
-            }
+            canDeactivate: [UnsavedChangesGuard]
           },
           {
             path: '',

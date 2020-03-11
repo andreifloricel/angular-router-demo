@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Crisis } from '../crisis';
@@ -9,6 +9,8 @@ import {
   EditableComponent,
   UnsavedChangesService
 } from '../../unsaved-changes/unsaved-changes.service';
+import { CrisisService } from '../crisis.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crisis-detail',
@@ -26,16 +28,24 @@ export class CrisisDetailComponent implements OnInit, EditableComponent {
   @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private unsavedChangesService: UnsavedChangesService
+    private unsavedChangesService: UnsavedChangesService,
+    private crisisServive: CrisisService
   ) {}
 
   ngOnInit() {
-    this.route.data.subscribe((data: { crisis: Crisis }) => {
-      this.editName = data.crisis.name;
-      this.crisis = data.crisis;
-    });
+    console.log('CrisisDetailComponent::ngOnInit');
+
+    this.activatedRoute.paramMap
+      .pipe(
+        map(params => +params.get('id')),
+        switchMap(crisisId => this.crisisServive.getCrisis(crisisId))
+      )
+      .subscribe(crisis => {
+        this.editName = crisis.name;
+        this.crisis = crisis;
+      });
   }
 
   cancel() {
@@ -57,7 +67,9 @@ export class CrisisDetailComponent implements OnInit, EditableComponent {
     // so that the CrisisListComponent can select that crisis.
     // Add a totally useless `foo` parameter for kicks.
     // Relative navigation back to the crises
-    this.router.navigate(['../', { id: crisisId, foo: 'foo' }], { relativeTo: this.route });
+    this.router.navigate(['../', { id: crisisId, foo: 'foo' }], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   onSelectedTabChange(tabChangeEvent: MatTabChangeEvent) {
