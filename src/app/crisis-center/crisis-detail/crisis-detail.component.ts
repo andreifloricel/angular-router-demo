@@ -37,15 +37,8 @@ export class CrisisDetailComponent implements OnInit, EditableComponent {
   ngOnInit() {
     console.log('CrisisDetailComponent::ngOnInit');
 
-    this.activatedRoute.paramMap
-      .pipe(
-        map(params => +params.get('id')),
-        switchMap(crisisId => this.crisisServive.getCrisis(crisisId))
-      )
-      .subscribe(crisis => {
-        this.editName = crisis.name;
-        this.crisis = crisis;
-      });
+    this.useRouteSnapshot();
+    // this.useActivatedRoute();
   }
 
   cancel() {
@@ -90,5 +83,31 @@ export class CrisisDetailComponent implements OnInit, EditableComponent {
           }
         });
     }*/
+  }
+
+  private useRouteSnapshot() {
+    const activatedRouteSnapshot: ActivatedRouteSnapshot = this.activatedRoute.snapshot;
+
+    const selectedCrisisId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.crisisServive.getCrisis(selectedCrisisId).subscribe(crisis => {
+      this.editName = crisis.name;
+      this.crisis = crisis;
+    });
+  }
+
+  private useActivatedRoute() {
+    // no need to unsubcribe from the activated route !!
+    // https://angular.io/guide/router#observable-parammap-and-component-reuse
+
+    this.activatedRoute.paramMap
+      .pipe(
+        map(params => +params.get('id')),
+        switchMap(crisisId => this.crisisServive.getCrisis(crisisId))
+      )
+      .subscribe(crisis => {
+        this.editName = crisis.name;
+        this.crisis = crisis;
+      });
   }
 }
